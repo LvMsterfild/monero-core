@@ -16,8 +16,8 @@ if [ ! -d $MONERO_DIR/src ]; then
     git submodule init monero
 fi
 git submodule update --remote
-# git -C $MONERO_DIR fetch --tags
-# git -C $MONERO_DIR checkout v0.10.3.1
+# git -C $MONERO_DIR fetch
+# git -C $MONERO_DIR checkout release-v0.11.0.0
 
 # get monero core tag
 get_tag
@@ -108,6 +108,7 @@ elif [ "$BUILD_TYPE" == "debug-android" ]; then
 elif [ "$BUILD_TYPE" == "debug" ]; then
     echo "Building libwallet debug"
     CMAKE_BUILD_TYPE=Debug
+    STATIC=true
 else
     echo "Valid build types are release, release-static, release-android, debug-android and debug"
     exit 1;
@@ -115,7 +116,7 @@ fi
 
 
 echo "cleaning up existing monero build dir, libs and includes"
-#rm -fr $MONERO_DIR/build
+rm -fr $MONERO_DIR/build
 rm -fr $MONERO_DIR/lib
 rm -fr $MONERO_DIR/include
 rm -fr $MONERO_DIR/bin

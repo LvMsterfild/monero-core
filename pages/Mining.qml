@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2015, The Monero Project
+// Copyright (c) 2014-2018, The Monero Project
 // 
 // All rights reserved.
 // 
@@ -38,10 +38,9 @@ Rectangle {
     property var currentHashRate: 0
 
     function isDaemonLocal() {
-        var daemonAddress = appWindow.persistentSettings.daemon_address
-        if (daemonAddress === "")
+        if (appWindow.currentDaemonAddress === "")
             return false
-        var daemonHost = daemonAddress.split(":")[0]
+        var daemonHost = appWindow.currentDaemonAddress.split(":")[0]
         if (daemonHost === "127.0.0.1" || daemonHost === "localhost")
             return true
         return false
@@ -51,8 +50,6 @@ Rectangle {
     ColumnLayout {
         id: mainLayout
         anchors.margins: 40
-        anchors.bottomMargin: 10
-
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
@@ -154,7 +151,7 @@ Rectangle {
                     releasedColor: "#FF6C3C"
                     pressedColor: "#FF4304"
                     onClicked: {
-                        var success = walletManager.startMining(appWindow.currentWallet.address, soloMinerThreadsLine.text, persistentSettings.allow_background_mining, persistentSettings.miningIgnoreBattery)
+                        var success = walletManager.startMining(appWindow.currentWallet.address(0, 0), soloMinerThreadsLine.text, persistentSettings.allow_background_mining, persistentSettings.miningIgnoreBattery)
                         if (success) {
                             update()
                         } else {
@@ -188,7 +185,6 @@ Rectangle {
 
         Text {
             id: statusText
-            anchors.topMargin: 17
             text: qsTr("Status: not mining")
             textFormat: Text.RichText
             wrapMode: Text.Wrap
